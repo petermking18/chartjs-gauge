@@ -14,15 +14,35 @@ const {
 
 const addRoundedRectPath = (ctx, rect) => {
   const { x, y, w, h, radius } = rect;
-  ctx.arc(x + radius.topLeft, y + radius.topLeft, radius.topLeft, -HALF_PI, PI, true);
-  ctx.lineTo(x, y + h - radius.bottomLeft);
-  ctx.arc(x + radius.bottomLeft, y + h - radius.bottomLeft, radius.bottomLeft, PI, HALF_PI, true);
-  ctx.lineTo(x + w - radius.bottomRight, y + h);
-  ctx.arc(x + w - radius.bottomRight, y + h - radius.bottomRight, radius.bottomRight, HALF_PI, 0, true);
-  ctx.lineTo(x + w, y + radius.topRight);
-  ctx.arc(x + w - radius.topRight, y + radius.topRight, radius.topRight, 0, -HALF_PI, true);
-  ctx.lineTo(x + radius.topLeft, y);
-}
+  if (radius) {
+    var r = Math.min(radius, h / 2, w / 2);
+    var left = x + r;
+    var top = y + r;
+    var right = x + w - r;
+    var bottom = y + h - r;
+
+    ctx.moveTo(x, top);
+    if (left < right && top < bottom) {
+      ctx.arc(left, top, r, -PI, -HALF_PI);
+      ctx.arc(right, top, r, -HALF_PI, 0);
+      ctx.arc(right, bottom, r, 0, HALF_PI);
+      ctx.arc(left, bottom, r, HALF_PI, PI);
+    } else if (left < right) {
+      ctx.moveTo(left, y);
+      ctx.arc(right, top, r, -HALF_PI, HALF_PI);
+      ctx.arc(left, top, r, HALF_PI, PI + HALF_PI);
+    } else if (top < bottom) {
+      ctx.arc(left, top, r, -PI, 0);
+      ctx.arc(left, bottom, r, 0, PI);
+    } else {
+      ctx.arc(left, top, r, -PI, PI);
+    }
+    ctx.closePath();
+    ctx.moveTo(x, y);
+  } else {
+    ctx.rect(x, y, w, h);
+  }
+};
 
 function getRatioAndOffset(rotation, circumference, cutout, needleOpts) {
   let ratioX = 1;
@@ -259,9 +279,9 @@ export default class GaugeController extends DoughnutController {
       config,
       chartArea,
     } = this.chart;
-    const {
-      defaultFontFamily,
-    } = config.options;
+    // const {
+    //   defaultFontFamily,
+    // } = config.options;
     const dataset = config.data.datasets[this.index];
     const {
       formatter,
@@ -271,6 +291,7 @@ export default class GaugeController extends DoughnutController {
       borderRadius,
       padding,
       bottomMarginPercentage,
+      defaultFontFamily
     } = this.options.valueLabel;
 
     const width = chartArea.right - chartArea.left;
@@ -355,7 +376,7 @@ GaugeController.overrides = {
     display: true,
     formatter: data => Math.round(data.dataset.value * 100) + '%',
     color: 'rgba(255, 255, 255, 1)',
-    backgroundColor: 'rgba(0, 255, 0, 1)',
+    backgroundColor: 'rgba(0, 0, 0, 1)',
     borderRadius: 5,
     padding: {
       top: 5,
@@ -363,7 +384,9 @@ GaugeController.overrides = {
       bottom: 5,
       left: 5,
     },
-    bottomMarginPercentage: 0
+    bottomMarginPercentage: -20,
+    fontSize: 40,
+    defaultFontFamily: 'sans-serif'
   },
   // The percentage of the chart that we cut out of the middle.
   cutout: '35%',
