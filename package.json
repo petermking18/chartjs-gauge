@@ -22,7 +22,8 @@
     "url": "https://github.com/haiiaaa/chartjs-gauge/issues"
   },
   "dependencies": {
-    "chart.js": "^2.8.0"
+    "@rollup/plugin-json": "^4.1.0",
+    "chart.js": "^3.9.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

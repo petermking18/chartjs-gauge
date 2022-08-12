@@ -1,5 +1,6 @@
 const babel = require('rollup-plugin-babel');
 const { terser } = require('rollup-plugin-terser');
+const json = require('@rollup/plugin-json');
 const pkg = require('./package.json');
 
 const input = 'src/index.js';
@@ -20,6 +21,7 @@ module.exports = [
       babel({
         exclude: 'node_modules/**',
       }),
+      json()
     ],
     output: {
       name: 'Gauge',
@@ -46,6 +48,7 @@ module.exports = [
           preamble: banner,
         },
       }),
+      json()
     ],
     output: {
       name: 'Gauge',

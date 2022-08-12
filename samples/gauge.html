@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gauge Chart</title>
-  <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script>
+  <script src="../node_modules/chart.js/dist/chart.js"></script>
   <script src="../dist/chartjs-gauge.js"></script>
   <style>
     canvas {
@@ -46,32 +46,11 @@
       type: 'gauge',
       data: {
         datasets: [{
-          value: 0.5,
+          value: .62,
           minValue: 0,
-          data: [1, 2, 3, 4],
+          data: [1/4, 2/4, 3/4, 4/4],
           backgroundColor: ['green', 'yellow', 'orange', 'red'],
         }]
-      },
-      options: {
-        needle: {
-          radiusPercentage: 2,
-          widthPercentage: 3.2,
-          lengthPercentage: 80,
-          color: 'rgba(0, 0, 0, 1)'
-        },
-        valueLabel: {
-          display: true,
-          formatter: (value) => {
-            return '$' + Math.round(value);
-          },
-          color: 'rgba(255, 255, 255, 1)',
-          backgroundColor: 'rgba(0, 0, 0, 1)',
-          borderRadius: 5,
-          padding: {
-            top: 10,
-            bottom: 10
-          }
-        }
       }
     };
 
