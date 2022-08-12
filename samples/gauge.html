@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -20,9 +21,8 @@
   <div id="canvas-holder" style="width:100%">
     <canvas id="chart"></canvas>
   </div>
-  <button id="randomizeData">Randomize Data</button>
   <script>
-    var randomScalingFactor = function() {
+    var randomScalingFactor = function () {
       return Math.round(Math.random() * 100);
     };
 
@@ -45,54 +45,41 @@
     var config = {
       type: 'gauge',
       data: {
-        //labels: ['Success', 'Warning', 'Warning', 'Error'],
         datasets: [{
-          data: data,
-          value: value,
+          value: 0.5,
+          minValue: 0,
+          data: [1, 2, 3, 4],
           backgroundColor: ['green', 'yellow', 'orange', 'red'],
-          borderWidth: 2
         }]
       },
       options: {
-        responsive: true,
-        title: {
-          display: true,
-          text: 'Gauge chart'
-        },
-        layout: {
-          padding: {
-            bottom: 30
-          }
-        },
         needle: {
-          // Needle circle radius as the percentage of the chart area width
           radiusPercentage: 2,
-          // Needle width as the percentage of the chart area width
           widthPercentage: 3.2,
-          // Needle length as the percentage of the interval between inner radius (0%) and outer radius (100%) of the arc
           lengthPercentage: 80,
-          // The color of the needle
           color: 'rgba(0, 0, 0, 1)'
         },
         valueLabel: {
-          formatter: Math.round
+          display: true,
+          formatter: (value) => {
+            return '$' + Math.round(value);
+          },
+          color: 'rgba(255, 255, 255, 1)',
+          backgroundColor: 'rgba(0, 0, 0, 1)',
+          borderRadius: 5,
+          padding: {
+            top: 10,
+            bottom: 10
+          }
         }
       }
     };
 
-    window.onload = function() {
+    window.onload = function () {
       var ctx = document.getElementById('chart').getContext('2d');
       window.myGauge = new Chart(ctx, config);
     };
-
-    document.getElementById('randomizeData').addEventListener('click', function() {
-      config.data.datasets.forEach(function(dataset) {
-        dataset.data = randomData();
-        dataset.value = randomValue(dataset.data);
-      });
-
-      window.myGauge.update();
-    });
   </script>
 </body>
+
 </html>
